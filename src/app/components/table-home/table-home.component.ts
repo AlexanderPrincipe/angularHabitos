@@ -73,7 +73,7 @@ export class TableHomeComponent implements OnInit{
   }
 
   getData() {
-    this.habitosService.getTodo('http://localhost:3000/api/todos')
+    this.habitosService.getTodo('http://ec2-3-82-204-158.compute-1.amazonaws.com:3000/api/todos')
       .subscribe(resp => {
         console.log('GET DATA', resp);
       })
