@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { HabitosService } from '../../services/habitos.service'
 
 /** Constants used to fill up our data base. */
 const FRUITS: string[] = [
@@ -52,19 +53,30 @@ const NAMES: string[] = [
   templateUrl: './table-home.component.html',
   styleUrls: ['./table-home.component.scss'],
 })
-export class TableHomeComponent {
+export class TableHomeComponent implements OnInit{
   displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
   dataSource: MatTableDataSource<UserData>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
+  constructor(private habitosService: HabitosService) {
     // Create 100 users
     const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(users);
+  }
+
+  ngOnInit(): void {
+      this.getData();
+  }
+
+  getData() {
+    this.habitosService.getTodo('http://localhost:3000/api/todos')
+      .subscribe(resp => {
+        console.log('GET DATA', resp);
+      })
   }
 
   ngAfterViewInit() {
